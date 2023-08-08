@@ -5,7 +5,7 @@ from collections import defaultdict
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 from datetime import datetime
-from dotenv import load_dotenv
+from config import WINE_LIST_PATH, SPECIAL_WINES
 
 def get_year_form(num):
     if 11 <= num % 100 <= 20:
@@ -18,11 +18,9 @@ def get_year_form(num):
         else:
             return "лет"
 
-load_dotenv()
-
 parser = argparse.ArgumentParser(description="Укажите путь к файлу с данными.")
-parser.add_argument("--file", type=str, default=os.getenv("WINE_LIST_PATH", "wine.xlsx"),
-                    help="Путь к файлу с данными. По умолчанию wine.xlsx.")
+parser.add_argument("--file", type=str, default=WINE_LIST_PATH,
+                    help="Путь к файлу с данными. По умолчанию из файла конфигурации.")
 args = parser.parse_args()
 
 env = Environment(
@@ -45,7 +43,8 @@ for _, row in wine_characteristics.iterrows():
 
 rendered_page = template.render(
     winery_age=f"{winery_age} {year_form}",
-    grouped_characteristics=grouped_characteristics
+    grouped_characteristics=grouped_characteristics,
+    special_wines=SPECIAL_WINES
 )
 
 with open("index.html", "w", encoding="utf8") as file:
