@@ -1,8 +1,11 @@
+import os
 import pandas as pd
+import argparse
 from collections import defaultdict
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 from datetime import datetime
+from dotenv import load_dotenv
 
 def get_year_form(num):
     if 11 <= num % 100 <= 20:
@@ -15,6 +18,13 @@ def get_year_form(num):
         else:
             return "лет"
 
+load_dotenv()
+
+parser = argparse.ArgumentParser(description="Укажите путь к файлу с данными.")
+parser.add_argument("--file", type=str, default=os.getenv("WINE_LIST_PATH", "wine.xlsx"),
+                    help="Путь к файлу с данными. По умолчанию wine.xlsx.")
+args = parser.parse_args()
+
 env = Environment(
     loader=FileSystemLoader("."),
     autoescape=select_autoescape(["html", "xml"])
@@ -26,7 +36,7 @@ current_year = datetime.now().year
 winery_age = current_year - 1920
 year_form = get_year_form(winery_age)
 
-wine_characteristics = pd.read_excel("wine2.xlsx")
+wine_characteristics = pd.read_excel(args.file)
 wine_characteristics = wine_characteristics.fillna("")
 
 grouped_characteristics = defaultdict(list)
@@ -40,7 +50,6 @@ rendered_page = template.render(
 
 with open("index.html", "w", encoding="utf8") as file:
     file.write(rendered_page)
-
 
 server = HTTPServer(("0.0.0.0", 8000), SimpleHTTPRequestHandler)
 server.serve_forever()
