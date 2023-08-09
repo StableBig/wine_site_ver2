@@ -18,37 +18,43 @@ def get_year_form(num):
 
     return "лет"
 
-parser = argparse.ArgumentParser(description="Укажите путь к файлу с данными.")
-parser.add_argument("--file", type=str, default=WINE_LIST_PATH,
-                    help="Путь к файлу с данными. По умолчанию из файла конфигурации.")
-args = parser.parse_args()
 
-env = Environment(
-    loader=FileSystemLoader("."),
-    autoescape=select_autoescape(["html", "xml"])
-)
+def main():
+    parser = argparse.ArgumentParser(description="Укажите путь к файлу с данными.")
+    parser.add_argument("--file", type=str, default=WINE_LIST_PATH,
+                        help="Путь к файлу с данными. По умолчанию из файла конфигурации.")
+    args = parser.parse_args()
 
-template = env.get_template("template.html")
+    env = Environment(
+        loader=FileSystemLoader("."),
+        autoescape=select_autoescape(["html", "xml"])
+    )
 
-current_year = datetime.now().year
-winery_age = current_year - FOUNDING_YEAR
-year_form = get_year_form(winery_age)
+    template = env.get_template("template.html")
 
-wine_characteristics = pd.read_excel(args.file)
-wine_characteristics = wine_characteristics.fillna("")
+    current_year = datetime.now().year
+    winery_age = current_year - FOUNDING_YEAR
+    year_form = get_year_form(winery_age)
 
-grouped_characteristics = defaultdict(list)
-for _, row in wine_characteristics.iterrows():
-    grouped_characteristics[row["Категория"]].append(row.to_dict())
+    wine_characteristics = pd.read_excel(args.file)
+    wine_characteristics = wine_characteristics.fillna("")
 
-rendered_page = template.render(
-    winery_age=f"{winery_age} {year_form}",
-    grouped_characteristics=grouped_characteristics,
-    special_wines=SPECIAL_WINES
-)
+    grouped_characteristics = defaultdict(list)
+    for _, row in wine_characteristics.iterrows():
+        grouped_characteristics[row["Категория"]].append(row.to_dict())
 
-with open("index.html", "w", encoding="utf8") as file:
-    file.write(rendered_page)
+    rendered_page = template.render(
+        winery_age=f"{winery_age} {year_form}",
+        grouped_characteristics=grouped_characteristics,
+        special_wines=SPECIAL_WINES
+    )
 
-server = HTTPServer(("0.0.0.0", 8000), SimpleHTTPRequestHandler)
-server.serve_forever()
+    with open("index.html", "w", encoding="utf8") as file:
+        file.write(rendered_page)
+
+    server = HTTPServer(("0.0.0.0", 8000), SimpleHTTPRequestHandler)
+    server.serve_forever()
+
+
+if __name__ == '__main__':
+    main()
