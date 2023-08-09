@@ -5,7 +5,7 @@ from collections import defaultdict
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 from datetime import datetime
-from config import WINE_LIST_PATH, SPECIAL_WINES
+from config import FOUNDING_YEAR, WINE_LIST_PATH, SPECIAL_WINES
 
 def get_year_form(num):
     if 11 <= num % 100 <= 20:
@@ -31,7 +31,7 @@ env = Environment(
 template = env.get_template("template.html")
 
 current_year = datetime.now().year
-winery_age = current_year - 1920
+winery_age = current_year - FOUNDING_YEAR
 year_form = get_year_form(winery_age)
 
 wine_characteristics = pd.read_excel(args.file)
