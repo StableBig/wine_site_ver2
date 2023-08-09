@@ -7,16 +7,17 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 from datetime import datetime
 from config import FOUNDING_YEAR, WINE_LIST_PATH, SPECIAL_WINES
 
+
 def get_year_form(num):
     if 11 <= num % 100 <= 20:
         return "лет"
-    else:
-        if num % 10 == 1:
-            return "год"
-        elif 2 <= num % 10 <= 4:
-            return "года"
-        else:
-            return "лет"
+
+    if num % 10 == 1:
+        return "год"
+    elif 2 <= num % 10 <= 4:
+        return "года"
+
+    return "лет"
 
 parser = argparse.ArgumentParser(description="Укажите путь к файлу с данными.")
 parser.add_argument("--file", type=str, default=WINE_LIST_PATH,
