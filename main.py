@@ -4,7 +4,7 @@ from collections import defaultdict
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 from datetime import datetime
-from config import FOUNDING_YEAR, WINE_LIST_PATH, SPECIAL_WINES
+from config import FOUNDING_YEAR, WINE_LIST_PATH
 
 
 def get_year_form(num):
@@ -46,7 +46,6 @@ def main():
     rendered_page = template.render(
         winery_age=f"{winery_age} {year_form}",
         grouped_characteristics=grouped_characteristics,
-        special_wines=SPECIAL_WINES
     )
 
     with open("index.html", "w", encoding="utf8") as file:
