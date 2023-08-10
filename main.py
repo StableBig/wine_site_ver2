@@ -20,9 +20,9 @@ def get_year_form(num):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Укажите путь к файлу с данными.")
+    parser = argparse.ArgumentParser(description="Скрипт для генерации веб-страницы на основе данных о винах из файла Excel. Запускает веб-сервер для отображения результата.")
     parser.add_argument("--file", type=str, default=WINE_LIST_PATH,
-                        help="Путь к файлу с данными. По умолчанию из файла конфигурации.")
+                        help="Путь к файлу Excel с данными о винах. По умолчанию используется путь из файла конфигурации.")
     args = parser.parse_args()
 
     env = Environment(
