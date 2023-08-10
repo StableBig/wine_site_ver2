@@ -1,2 +1,1 @@
-FOUNDING_YEAR = 1920
-WINE_LIST_PATH = "wine.xlsx"
+

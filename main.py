@@ -1,11 +1,16 @@
+import os
+from dotenv import load_dotenv
 import pandas as pd
 import argparse
 from collections import defaultdict
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 from datetime import datetime
-from config import FOUNDING_YEAR, WINE_LIST_PATH
 
+load_dotenv()
+
+FOUNDING_YEAR = int(os.environ.get("FOUNDING_YEAR", 1920))
+WINE_LIST_PATH = os.environ.get("WINE_LIST_PATH", "wine.xlsx")
 
 def get_year_form(num):
     if 11 <= num % 100 <= 20:
