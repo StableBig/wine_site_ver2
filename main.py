@@ -1,16 +1,12 @@
 import os
-from dotenv import load_dotenv
 import pandas as pd
 import argparse
 from collections import defaultdict
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 from datetime import datetime
+from dotenv import load_dotenv
 
-load_dotenv()
-
-FOUNDING_YEAR = int(os.environ.get("FOUNDING_YEAR", 1920))
-WINE_LIST_PATH = os.environ.get("WINE_LIST_PATH", "wine.xlsx")
 
 def get_year_form(num):
     if 11 <= num % 100 <= 20:
@@ -25,6 +21,11 @@ def get_year_form(num):
 
 
 def main():
+    load_dotenv()
+
+    FOUNDING_YEAR = int(os.environ.get("FOUNDING_YEAR", 1920))
+    WINE_LIST_PATH = os.environ.get("WINE_LIST_PATH", "wine.xlsx")
+
     parser = argparse.ArgumentParser(description="Скрипт для генерации веб-страницы на основе данных о винах из файла Excel. Запускает веб-сервер для отображения результата.")
     parser.add_argument("--file", type=str, default=WINE_LIST_PATH,
                         help="Путь к файлу Excel с данными о винах. По умолчанию используется путь из файла конфигурации.")
