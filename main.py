@@ -24,7 +24,7 @@ def main():
     load_dotenv()
 
     founding_year = int(os.environ.get("FOUNDING_YEAR", 1920))
-    wine_table_path = os.environ.get("WINE_LIST_PATH", "wine.xlsx")
+    wine_table_path = os.environ.get("WINE_TABLE_PATH", "wine.xlsx")
 
     parser = argparse.ArgumentParser(description="Скрипт для генерации веб-страницы на основе данных о винах из файла Excel. Запускает веб-сервер для отображения результата.")
     parser.add_argument("--file", type=str, default=wine_table_path,
