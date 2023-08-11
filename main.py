@@ -50,7 +50,7 @@ def main():
         grouped_characteristics[row["Категория"]].append(row.to_dict())
 
     rendered_page = template.render(
-        winery_age=f"{winery_age} {year_form}",
+        winery_age_template=f"{winery_age} {year_form}",
         grouped_characteristics=grouped_characteristics,
     )
 
