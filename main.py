@@ -23,11 +23,11 @@ def get_year_form(num):
 def main():
     load_dotenv()
 
-    FOUNDING_YEAR = int(os.environ.get("FOUNDING_YEAR", 1920))
-    WINE_LIST_PATH = os.environ.get("WINE_LIST_PATH", "wine.xlsx")
+    founding_year = int(os.environ.get("FOUNDING_YEAR", 1920))
+    wine_table_path = os.environ.get("WINE_LIST_PATH", "wine.xlsx")
 
     parser = argparse.ArgumentParser(description="Скрипт для генерации веб-страницы на основе данных о винах из файла Excel. Запускает веб-сервер для отображения результата.")
-    parser.add_argument("--file", type=str, default=WINE_LIST_PATH,
+    parser.add_argument("--file", type=str, default=wine_table_path,
                         help="Путь к файлу Excel с данными о винах. По умолчанию используется путь из файла конфигурации.")
     args = parser.parse_args()
 
@@ -39,7 +39,7 @@ def main():
     template = env.get_template("template.html")
 
     current_year = datetime.now().year
-    winery_age = current_year - FOUNDING_YEAR
+    winery_age = current_year - founding_year
     year_form = get_year_form(winery_age)
 
     wine_characteristics = pd.read_excel(args.file)
